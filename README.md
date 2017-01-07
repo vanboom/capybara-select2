@@ -46,13 +46,7 @@ include Capybara::Select2
 Just use this method inside your capybara test:
 
 ``` ruby
-select2("Dropdown Text", from: "Label of the dropdown")
-```
-
-or
-
-``` ruby
-select2("Dropdown Text", xpath: "<xpath of the dropdown>")
+select2("Search Value", css: "#select2-attribute-container", :value=>"Value to Select", :search=>true)
 ```
 
 If the select2 field has a `min_length` option (acts as a search field) specify it with:
