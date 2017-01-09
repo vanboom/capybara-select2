@@ -19,7 +19,7 @@ module Capybara
       value = options[:value]
 
       # Open select2 field
-      select2_container.click
+      select2_container.trigger('click')
 
       if options.has_key? :search
         find("input.select2-search__field").set(search)
@@ -28,7 +28,7 @@ module Capybara
 
       [value].flatten.each do |value|
         # select2 version 4.0
-        find(:xpath, "//body").find(".select2-dropdown li.select2-results__option", text: value).click
+        find(:xpath, "//body").find(".select2-dropdown li.select2-results__option", text: value).trigger('click')
       end
     end
   end
