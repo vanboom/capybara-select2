@@ -4,32 +4,35 @@ require 'rspec/core'
 
 module Capybara
   module Select2
-    def select2(search, options = {})
-      raise "Must pass a hash containing 'from' or 'xpath' or 'css'" unless options.is_a?(Hash) and [:from, :xpath, :css].any? { |k| options.has_key? k }
+    def select2(value, **options)
+      from = options[:from]
+      raise "You must specify a CSS ID selector." unless from.present? and from[0] == "#"
+      execute_script %| $('#{from}').select2('open'); |
+      search = options[:search]
+      #first(".select2-search__field").set(search)
+      if search.present?
+        execute_script %|$("input.select2-search__field:visible").val("#{search}");|
+        execute_script %|$("input.select2-search__field:visible").trigger("input");|
+        sleep 1
+      end
 
-      if options.has_key? :xpath
-        select2_container = find(:xpath, options[:xpath])
-      elsif options.has_key? :css
-        select2_container = find(:css, options[:css])
+      # the results are in a UL with the id="select2-booking_client_id-results"
+      results_container = "#select2-%s-results" % from.gsub('#','')
+
+      # this will cause Capybara to wait for the ajax results
+      wait_until{ find(results_container).visible? }
+
+      # check for a nested/grouped value
+      # select the last element, because grouped results are nested within an outer li and we want the inner one
+      e = all("li", text: /#{Regexp.escape(value)}/).last
+      if e.present?
+        # click it
+        e.trigger('mouseover')
+        e.trigger('mouseup')
       else
-        select_name = options[:from]
-        select2_container = find("label", text: select_name).find(:xpath, '..').find(".select2-container")
+        raise "%s :value not found" % value
       end
-
-      value = options[:value]
-
-      # Open select2 field
-      select2_container.click
-
-      if options.has_key? :search
-        find("input.select2-search__field").set(search)
-        #page.execute_script(%|$("input.select2-search__field:visible").keyup();|)
-      end
-
-      [value].flatten.each do |value|
-        # select2 version 4.0
-        find(:xpath, "//body").find(".select2-dropdown li.select2-results__option", text: value).click
-      end
+      execute_script %| $('#{from}').select2('close'); |
     end
   end
 end

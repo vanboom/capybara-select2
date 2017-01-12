@@ -1,8 +1,6 @@
 # Capybara::Select2
 
-[![Code Climate](https://codeclimate.com/github/goodwill/capybara-select2.png)](https://codeclimate.com/github/goodwill/capybara-select2)
-
-All this gem does is something very simple- allow you to trigger select2 dropdown to select the value you want. The original select doesn't with the javascript overrides, so this new helper method does only this thing.
+This gem allows you to set the value of select form elements when using the select2 control.
 
 ## Installation
 
@@ -41,25 +39,16 @@ If you're using capybara outside of Rspec, you may have to include the following
 include Capybara::Select2
 ```
 
-## Usage
+## Usage (Vanboom Rewrite)
 
 Just use this method inside your capybara test:
 
 ``` ruby
-select2("Search Value", css: "#select2-attribute-container", :value=>"Value to Select", :search=>true)
+select2( "Value to Select", from: "#id_of_select", :search=>"Value to use in search (AJAX only)")
 ```
 
-If the select2 field has a `min_length` option (acts as a search field) specify it with:
+> The :search term is not needed if the select is pre-populated with options.  Use :search to trigger searches when using an AJAX data source.
 
-``` ruby
-select2("foo", from: "Label of the dropdown", search: true)
-```
-
-If select2 field has [tags](http://ivaynberg.github.io/select2/#tags) option you can use:
-
-```ruby
-select2_tag('value', from: 'Label of input')
-```
 
 ## Contributing
 
