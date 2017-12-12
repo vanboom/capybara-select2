@@ -28,8 +28,7 @@ module Capybara
       e = all("li", text: /#{Regexp.escape(value)}/).last
       if e.present?
         # click it
-        e.trigger('mouseover')
-        e.trigger('mouseup')
+        e.click
       else
         raise "%s :value not found" % value
       end
