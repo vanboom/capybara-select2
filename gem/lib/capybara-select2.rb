@@ -20,7 +20,7 @@ sleep(0.1)
         execute_script %|$('#{search_input}').val('#{j search}');|
         execute_script %|$('#{search_input}').trigger('input');|
       end
-sleep 0.5
+sleep 0.1
 
       # the results are in a UL with the id="select2-booking_client_id-results"
       results_container = "#select2-%s-results" % from.gsub('#','')
@@ -40,7 +40,7 @@ sleep 0.5
         raise "%s :value not found" % value
       end
       #execute_script %| $('#{from}').select2('close'); |
-sleep 0.2
+sleep 0.1
     end
   end
 end
