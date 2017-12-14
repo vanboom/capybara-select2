@@ -11,16 +11,13 @@ module Capybara
       search_input = from + "-search__field"
       raise "You must specify a CSS ID selector." unless from.present? and from[0] == "#"
       execute_script %| $('#{from}').select2('open'); |
-sleep(0.1)
       search = options[:search]
       #first(".select2-search__field").set(search)
       if search.present?
         # type the search term into the search input field
-#        fill_in search_input, :with=>search
-        execute_script %|$('#{search_input}').val('#{j search}');|
-        execute_script %|$('#{search_input}').trigger('input');|
+        fill_in search_input.gsub("#",""), :with=>search
+        #execute_script %|$('#{search_input}').trigger('input');|
       end
-sleep 0.1
 
       # the results are in a UL with the id="select2-booking_client_id-results"
       results_container = "#select2-%s-results" % from.gsub('#','')
@@ -31,7 +28,7 @@ sleep 0.1
 
       # check for a nested/grouped value
       # select the last element, because grouped results are nested within an outer li and we want the inner one
-      e = all("li", text: /#{Regexp.escape(value)}/).last
+      e = find("ul > li > ul > li.select2-results__option", text: /#{Regexp.escape(value)}/)
       if e.present?
         # click it
         e.hover
@@ -40,7 +37,6 @@ sleep 0.1
         raise "%s :value not found" % value
       end
       #execute_script %| $('#{from}').select2('close'); |
-sleep 0.1
     end
   end
 end
