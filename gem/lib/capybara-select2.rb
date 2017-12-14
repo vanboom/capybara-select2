@@ -28,7 +28,7 @@ module Capybara
 
       # check for a nested/grouped value
       # select the last element, because grouped results are nested within an outer li and we want the inner one
-      e = find("ul > li > ul > li.select2-results__option", text: /#{Regexp.escape(value)}/)
+      e = find("li.select2-results__option[@role='treeitem']", text: /#{Regexp.escape(value)}/)
       if e.present?
         # click it
         e.hover
@@ -36,6 +36,7 @@ module Capybara
       else
         raise "%s :value not found" % value
       end
+      page.driver.reset!
       #execute_script %| $('#{from}').select2('close'); |
     end
   end
