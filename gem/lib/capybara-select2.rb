@@ -36,7 +36,7 @@ module Capybara
       else
         raise "%s :value not found" % value
       end
-      page.driver.reset!
+      #page.driver.reset!
       #execute_script %| $('#{from}').select2('close'); |
     end
   end
